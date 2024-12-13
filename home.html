@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Prezzo Stampa PDF</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f3f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            text-align: center;
+            padding-top: 100px; /* Spazio per il titolo fisso in cima */
+            padding-bottom: 50px; /* Spazio per il footer fisso */
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            width: 100%;
+            position: fixed; /* Aggiunta per fissare il titolo in cima */
+            top: 0;
+            left: 0;
+            z-index: 1000; /* Mantiene il titolo sopra gli altri contenuti */
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+
+        section {
+            background: white;
+            padding: 40px;
+            width: 80%;
+            max-width: 700px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 100px; /* Evita che il contenuto venga sovrapposto al titolo */
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .quality-standard {
+            color: #000; /* Nero per qualità standard */
+            font-weight: bold;
+        }
+
+        .quality-high {
+            color: #3498db; /* Blu per qualità maggiorata */
+            font-weight: bold;
+        }
+
+        .quality-max {
+            color: #e74c3c; /* Rosso per qualità massima */
+            font-weight: bold;
+        }
+
+        form {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #ecf0f1;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        input[type="file"], select, button {
+            width: calc(100% - 20px); /* Modifica la larghezza per evitare overflow */
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            font-size: 1.1em;
+            box-sizing: border-box; /* Assicura che il padding non faccia sforare l'elemento */
+        }
+
+        input[type="file"] {
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        select {
+            background-color: #fff;
+            color: #34495e;
+        }
+
+        button {
+            background-color: #27ae60;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2ecc71;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Mantiene il footer sopra altri elementi */
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        #result h3 {
+            font-size: 1.5em;
+            color: #34495e;
+        }
+
+        #result p {
+            font-size: 1.2em;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        
+        <h1>Calcolatore Prezzo Stampa PDF</h1>
+    </header>
+
+    <section>
+        <div class="content">
+            <h2>Calcola il costo della stampa del tuo PDF</h2>
+            
+            <!-- Introduzione ai prezzi -->
+            <p>
+                Scegli tra le opzioni di stampa disponibili:<br>
+                <strong>Bianco e Nero</strong>: 2 centesimi per facciata *<br>
+                <strong>A Colori</strong>: 3 centesimi per facciata *
+            </p>
+
+            <p>
+                Puoi anche scegliere la qualità della stampa:<br>
+                <span class="quality-standard">Qualità Standard</span>: Prezzo base<br>
+                <span class="quality-high">Qualità Maggiorata</span>: +2 centesimi per facciata<br>
+                <span class="quality-max">Qualità Massima</span>: +4 centesimi per facciata
+            </p>
+
+            <p>
+                In aggiunta, puoi selezionare l'opzione per la <strong>Rilegatura</strong> (+1€).
+            </p>
+            <p>
+            <strong>*</strong> Il prezzo viene adeguato alle cifre decimali.
+            </p>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input type="file" name="file" id="fileInput" accept="application/pdf" required>
+                
+                <select name="colorOption" id="colorOption" required>
+                    <option value="bw">Bianco e Nero</option>
+                    <option value="color">A Colori</option>
+                </select>
+
+                <select name="qualityOption" id="qualityOption" required>
+                    <option value="standard">Qualità Standard</option>
+                    <option value="high">Qualità Maggiorata (+2 centesimi)</option>
+                    <option value="max">Qualità Massima (+4 centesimi)</option>
+                </select>
+
+                <label>
+                    <input type="checkbox" name="binding"> Aggiungi Rilegatura (+1€)
+                </label>
+
+                <button type="submit">Carica e Calcola Prezzo</button>
+            </form>
+
+            <div id="result">
+                <h3>Prezzo Stampa</h3>
+                <p id="resultPrice"></p>
+                <p id="resultPages"></p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Tutti i diritti riservati &copy; 2024</p>
+    </footer>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var formData = new FormData(this);
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.price) {
+                    document.getElementById('result').style.display = 'block';
+                    document.getElementById('resultPrice').textContent = 'Prezzo totale: €' + data.price.toFixed(2);
+                    document.getElementById('resultPages').textContent = 'Numero di pagine: ' + data.num_pages;
+                } else {
+                    alert('Errore nel caricamento del file');
+                }
+            });
+        });
+    </script>
+
+</body>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        /* Stili di base */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header con il tasto Home */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        /* Stile del tasto Home */
+        .home-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header con il tasto Home -->
+    <header>
+        <a href="/" class="home-button">Home</a>
+    </header>
+
+    <!-- Contenuto della pagina -->
+
+</body>
+</html>
