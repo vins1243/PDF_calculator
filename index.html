@@ -183,6 +183,24 @@
             color: #7f8c8d;
         }
 
+        #userName {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 1em;
+            background-color: #fff;
+            color: #34495e;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #userName:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+            outline: none;
+        }
+
     </style>
 </head>
 <body>
@@ -245,6 +263,12 @@
                 <h3>Prezzo Stampa</h3>
                 <p id="resultPrice"></p>
                 <p id="resultPages"></p>
+                <button id="confirmButton">Vuoi confermare l'invio del file?</button>
+            </div>
+
+            <div id="confirmationForm" style="display: none; margin-top: 20px;">
+                <input type="text" id="userName" placeholder="Inserisci Nome e Cognome" required>
+                <button id="sendEmailButton">Carica e Invia via Email</button>
             </div>
         </div>
     </section>
@@ -313,11 +337,36 @@
                     document.getElementById('result').style.display = 'block';
                     document.getElementById('resultPrice').textContent = 'Prezzo totale: €' + totalCost.toFixed(2);
                     document.getElementById('resultPages').textContent = 'Numero di pagine: ' + numPages;
-                }).catch(function(error) {
-                    alert('Errore nel caricamento del PDF: ' + error.message);
+
+                    document.getElementById('confirmButton').addEventListener('click', function() {
+                        document.getElementById('confirmationForm').style.display = 'block';
+                    });
+
+                    document.getElementById('sendEmailButton').addEventListener('click', function() {
+                        var userName = document.getElementById('userName').value;
+                        if (!userName) {
+                            alert('Per favore inserisci Nome e Cognome.');
+                            return;
+                        }
+
+                        var email = "businessvins11@gmail.com";
+                        var subject = encodeURIComponent(userName);
+                        var body = encodeURIComponent(
+                            "Qualità della stampa: " + (qualityOption === "standard" ? "Standard" : (qualityOption === "high" ? "Alta" : "Massima")) +
+                            "\nStampa: " + (colorOption === "bw" ? "Bianco e Nero" : "Colori") +
+                            "\nRilegatura: " + (binding ? "Sì" : "No") +
+                            "\n" +
+                            "\nATTENZIONE: CONTROLLA CHE I CAMPI PRECOMPILATI SIANO GIUSTI. IN CASO CONTRARIO PUOI MODIFICARLI DIRETTAMENTE NELLA MAIL" +
+                            "\n" +
+                            "\nATTENZIONE: RICORDA DI ALLEGARE IL FILE NELLA SEGUENTE MAIL"
+                        );
+
+                        var mailtoLink = "mailto:" + email + "?subject=" + subject + "&body=" + body;
+
+                        window.location.href = mailtoLink;
+                    });
                 });
             };
-
             fileReader.readAsArrayBuffer(fileInput.files[0]);
         });
     </script>
