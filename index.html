@@ -201,7 +201,7 @@
             </p>
 
             <p>
-                In aggiunta, puoi selezionare l'opzione per la <strong>Rilegatura</strong> (+1€).
+                In aggiunta, puoi selezionare l'opzione per la <strong>Rilegatura</strong> (varia in base al numero di pagine).
             </p>
 
             <p class="additional-info">
@@ -223,7 +223,7 @@
                 </select>
 
                 <label>
-                    <input type="checkbox" name="binding"> Aggiungi Rilegatura (+1€)
+                    <input type="checkbox" name="binding"> Aggiungi Rilegatura
                 </label>
 
                 <button type="submit">Carica e Calcola Prezzo</button>
@@ -246,6 +246,18 @@
     <script>
         function roundUpToNextDecimal(value) {
             return Math.ceil(value * 10) / 10;
+        }
+
+        function calculateBindingCost(numPages) {
+            if (numPages <= 40) {
+                return 1.00;
+            } else if (numPages <= 80) {
+                return 1.50;
+            } else if (numPages <= 120) {
+                return 2.00;
+            } else {
+                return 2.50;
+            }
         }
 
         document.getElementById('uploadForm').addEventListener('submit', function(event) {
@@ -279,8 +291,9 @@
                     }
 
                     var totalCost = (basePrice + qualityCost) * pageCount;
+
                     if (binding) {
-                        totalCost += 1;
+                        totalCost += calculateBindingCost(numPages);
                     }
 
                     totalCost = roundUpToNextDecimal(totalCost);
