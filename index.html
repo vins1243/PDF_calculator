@@ -134,6 +134,12 @@
             width: 100%;
             z-index: 1000;
         }
+        
+        #showSendButtonsButton:disabled {
+            background-color: #bdc3c7; /* Grigio */
+            cursor: not-allowed; /* Cambia il cursore per indicare che non è cliccabile */
+        }
+        
         #sendEmailButton {
             background-color: #3498db; /* Blu */
             color: white; /* Testo bianco */
@@ -144,6 +150,11 @@
             cursor: pointer;
             border: none;
             transition: background-color 0.3s ease;
+        }
+        
+        #error-message {
+            color: red;
+            display: none; /* Viene nascosto inizialmente */
         }
 
         #sendEmailButton:hover {
@@ -255,7 +266,7 @@
 
             <form id="uploadForm" enctype="multipart/form-data">
                 <input type="file" name="file" id="fileInput" accept="application/pdf" required>
-                
+
                 <select name="colorOption" id="colorOption" required>
                     <option value="bw">Bianco e Nero</option>
                     <option value="color">A Colori</option>
@@ -280,12 +291,35 @@
                 <p id="resultPages"></p>
                 <button id="confirmButton">Vuoi confermare l'invio del file?</button>
             </div>
-
             <div id="confirmationForm" style="display: none; margin-top: 20px;">
                 <input type="text" id="userName" placeholder="Inserisci Nome e Cognome" required>
-                <button id="sendEmailButton">Carica e Invia via Email</button>
-                <button id="sendWhatsappButton">Carica e Invia via WhatsApp</button>
-            </div>
+
+                <!-- Nuove informazioni aggiunte prima dell'invio via email e WhatsApp -->
+                <p>
+                    1. Carica il file sul seguente <strong>Google Drive</strong>:  <a href="https://drive.google.com/drive/folders/1cEma5x3aQ3LTC2pUmrz9Y6iKpTQuRkvF?usp=sharing" class="convert-button" target="_blank">Carica</a>
+                </p>
+     
+                <!-- Casella di spunta per confermare il caricamento su Google Drive -->
+                <label for="googleDriveCheck">
+                    <input type="checkbox" id="googleDriveCheck"> Ho caricato il file su Google Drive
+                </label>
+                <p id="error-message" style="color: red; display: none;">Devi prima confermare il caricamento su Google Drive.</p>
+                
+                <p>
+                    2. Torna su questa pagina e decidi come inviare il file:
+                </p>
+
+
+             
+                
+                <button id="showSendButtonsButton">Invia</button>
+
+                <!-- Pulsanti per l'invio via email e WhatsApp (inizialmente nascosti) -->
+                <div id="sendButtons" style="display: none;">
+                    <button id="sendEmailButton">Invia Email</button>
+                    <button id="sendWhatsappButton">Invia WhatsApp</button>
+                </div>
+            
             <p>
                 Ricordati che se hai intenzione di inviare più file devi caricarne uno alla volta <strong>RICARICANDO</strong> la pagina
             </p>
@@ -314,6 +348,29 @@
                 return 2.50;
             }
         }
+        
+
+        // Codice per la gestione dell'errore e dei pulsanti
+        document.getElementById('showSendButtonsButton').addEventListener('click', function() {
+            // Verifica se la casella è selezionata
+            if (!googleDriveCheck.checked) {
+                // Mostra il messaggio di errore
+                document.getElementById('error-message').style.display = 'block';
+
+                // Aggiungi l'ombreggiatura rossa alla casella
+                googleDriveCheck.style.boxShadow = '0 0 10px red';
+            } else {
+                // Se la casella è selezionata, nascondi il messaggio di errore e rimuovi l'ombreggiatura rossa
+                document.getElementById('error-message').style.display = 'none';
+                googleDriveCheck.style.boxShadow = 'none';
+
+                // Mostra i pulsanti per inviare via email e WhatsApp
+                document.getElementById('sendButtons').style.display = 'block';
+
+                // Nascondi il bottone "Invia"
+                document.getElementById('showSendButtonsButton').style.display = 'none';
+            }
+        });
 
         document.getElementById('uploadForm').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -322,7 +379,6 @@
             var colorOption = document.getElementById('colorOption').value;
             var qualityOption = document.getElementById('qualityOption').value;
             var binding = document.querySelector('input[name="binding"]').checked;
-
             var formData = new FormData();
             formData.append("file", fileInput.files[0]);
 
@@ -363,6 +419,9 @@
 
                     document.getElementById('sendEmailButton').addEventListener('click', function() {
                         var userName = document.getElementById('userName').value;
+                        var fileInput = document.getElementById('fileInput');
+                        var fileName = fileInput.files[0] ? fileInput.files[0].name : "Nessun file caricato"; // Ottieni il nome del file o un messaggio se nessun file è stato caricato
+
                         if (!userName) {
                             alert('Per favore inserisci Nome e Cognome.');
                             return;
@@ -371,13 +430,13 @@
                         var email = "businessvins11@gmail.com";
                         var subject = encodeURIComponent(userName);
                         var body = encodeURIComponent(
+                            "Nome del file: " + fileName + "\n" +  // Aggiungi il nome del file come prima informazione
                             "Qualità della stampa: " + (qualityOption === "standard" ? "Standard" : (qualityOption === "high" ? "Alta" : "Massima")) +
                             "\nStampa: " + (colorOption === "bw" ? "Bianco e Nero" : "Colori") +
                             "\nRilegatura: " + (binding ? "Sì" : "No") +
                             "\n" +
-                            "\nATTENZIONE: CONTROLLA CHE I CAMPI PRECOMPILATI SIANO GIUSTI. IN CASO CONTRARIO PUOI MODIFICARLI DIRETTAMENTE NELLA MAIL" +
-                            "\n" +
-                            "\nATTENZIONE: RICORDA DI ALLEGARE IL FILE NELLA SEGUENTE MAIL"
+                            "\nATTENZIONE: CONTROLLA CHE I CAMPI PRECOMPILATI SIANO GIUSTI. IN CASO CONTRARIO PUOI MODIFICARLI DIRETTAMENTE NELLA MAIL" 
+
                         );
 
                         var mailtoLink = "mailto:" + email + "?subject=" + subject + "&body=" + body;
@@ -386,6 +445,9 @@
                     });
                     document.getElementById('sendWhatsappButton').addEventListener('click', function() {
                         var userName = document.getElementById('userName').value;
+                        var fileInput = document.getElementById('fileInput');
+                        var fileName = fileInput.files[0] ? fileInput.files[0].name : "Nessun file caricato"; // Ottieni il nome del file o un messaggio se nessun file è stato caricato
+
                         if (!userName) {
                             alert('Per favore inserisci Nome e Cognome.');
                             return;
@@ -398,11 +460,11 @@
 
                         var whatsappMessage = 
                             "*"+userName+"*" + "%0A" +
+                            "Nome del file: " + "*"+fileName+"*" +  "%0A" +  // Aggiungi il nome del file come prima informazione
                             "Qualità della stampa: " + "*"+quality+"*" + "%0A" +
                             "Stampa: " + "*"+color+"*" + "%0A" +
                             "Rilegatura: " + "*"+bindingText+"*" + "%0A%0A" + 
-                            "ATTENZIONE: CONTROLLA CHE I CAMPI PRECOMPILATI SIANO GIUSTI. IN CASO CONTRARIO PUOI MODIFICARLI DIRETTAMENTE NEL MESSAGGIO%0A%0A" +
-                            "ATTENZIONE: RICORDA DI ALLEGARE IL FILE NELLA CHAT.";
+                            "ATTENZIONE: CONTROLLA CHE I CAMPI PRECOMPILATI SIANO GIUSTI. IN CASO CONTRARIO PUOI MODIFICARLI DIRETTAMENTE NEL MESSAGGIO%0A%0A" 
 
                         var whatsappLink = "https://wa.me/" + whatsappNumber + "?text=" + whatsappMessage;
 
@@ -412,7 +474,24 @@
             };
             fileReader.readAsArrayBuffer(fileInput.files[0]);
         });
-    </script>
+        // Trova la casella di controllo e il pulsante "Invia"
+        const googleDriveCheck = document.getElementById('googleDriveCheck');
+        const sendButton = document.getElementById('showSendButtonsButton');
+
+        // Disabilita il pulsante "Invia" all'inizio
+        sendButton.disabled = true;
+
+        // Aggiungi un event listener per abilitare/disabilitare il pulsante "Invia"
+        googleDriveCheck.addEventListener('change', function() {
+            if (googleDriveCheck.checked) {
+                sendButton.disabled = !googleDriveCheck.checked;
+                document.getElementById('error-message').style.display = googleDriveCheck.checked ? 'none' : 'block';
+            } else {
+                sendButton.disabled = true; // Disabilita il pulsante se la casella non è selezionata
+                document.getElementById('error-message').style.display = 'block'; // Mostra il messaggio di errore
+            }
+        });
+            </script>
 
 </body>
 </html>
