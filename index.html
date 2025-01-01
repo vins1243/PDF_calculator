@@ -238,7 +238,7 @@
     <section>
         <div class="content">
             <h2>Calcola il costo della stampa del tuo PDF</h2>
-            
+
             <p>
                 Scegli tra le opzioni di stampa disponibili:<br>
                 <strong>Bianco e Nero</strong>: 3 centesimi per facciata<br>
@@ -257,11 +257,13 @@
             </p>
 
             <p class="additional-info">
-                Se hai un file <strong>Word</strong> puoi convertirlo <strong>qui</strong>: <a href="https://www.ilovepdf.com/word_to_pdf" class="convert-button" target="_blank">Converti</a>
+                Se hai un file <strong>Word</strong> puoi convertirlo <strong>qui</strong>: 
+                <a href="https://www.ilovepdf.com/word_to_pdf" class="convert-button" target="_blank">Converti</a>
             </p>
-            
+
             <p class="additional-info">
-                Se devi unire <strong>più file PDF</strong> puoi unirli <strong>qui</strong>: <a href="https://www.ilovepdf.com/it/unire_pdf" class="convert-button unisci-button" target="_blank">Unisci</a>
+                Se devi unire <strong>più file PDF</strong> puoi unirli <strong>qui</strong>: 
+                <a href="https://www.ilovepdf.com/it/unire_pdf" class="convert-button unisci-button" target="_blank">Unisci</a>
             </p>
 
             <form id="uploadForm" enctype="multipart/form-data">
@@ -285,44 +287,42 @@
                 <button type="submit">Carica e Calcola Prezzo</button>
             </form>
 
-            <div id="result">
+            <div id="result" style="display: none;">
                 <h3>Prezzo Stampa</h3>
                 <p id="resultPrice"></p>
                 <p id="resultPages"></p>
                 <button id="confirmButton">Vuoi confermare l'invio del file?</button>
             </div>
+
             <div id="confirmationForm" style="display: none; margin-top: 20px;">
                 <input type="text" id="userName" placeholder="Inserisci Nome e Cognome" required>
 
-                <!-- Nuove informazioni aggiunte prima dell'invio via email e WhatsApp -->
                 <p>
-                    1. Carica il file sul seguente <strong>Google Drive</strong>:  <a href="https://drive.google.com/drive/folders/1cEma5x3aQ3LTC2pUmrz9Y6iKpTQuRkvF?usp=sharing" class="convert-button" target="_blank">Carica</a>
+                    1. Carica il file sul seguente <strong>Google Drive</strong>:  
+                    <a href="https://drive.google.com/drive/folders/1cEma5x3aQ3LTC2pUmrz9Y6iKpTQuRkvF?usp=sharing" 
+                       class="convert-button" target="_blank">Carica</a>
                 </p>
-     
-                <!-- Casella di spunta per confermare il caricamento su Google Drive -->
+
                 <label for="googleDriveCheck">
                     <input type="checkbox" id="googleDriveCheck"> Ho caricato il file su Google Drive
                 </label>
                 <p id="error-message" style="color: red; display: none;">Devi prima confermare il caricamento su Google Drive.</p>
-                
+
                 <p>
                     2. Torna su questa pagina e decidi come inviare il file:
                 </p>
 
-
-             
-                
                 <button id="showSendButtonsButton">Invia</button>
 
-                <!-- Pulsanti per l'invio via email e WhatsApp (inizialmente nascosti) -->
                 <div id="sendButtons" style="display: none;">
                     <button id="sendEmailButton">Invia Email</button>
                     <button id="sendWhatsappButton">Invia WhatsApp</button>
                 </div>
-            
-            <p>
-                Ricordati che se hai intenzione di inviare più file devi caricarne uno alla volta <strong>RICARICANDO</strong> la pagina
-            </p>
+
+                <p>
+                    Ricordati che se hai intenzione di inviare più file devi caricarne uno alla volta <strong>RICARICANDO</strong> la pagina
+                </p>
+            </div>
         </div>
     </section>
 
