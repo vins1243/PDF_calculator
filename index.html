@@ -134,6 +134,21 @@
             width: 100%;
             z-index: 1000;
         }
+        #sendEmailButton {
+            background-color: #3498db; /* Blu */
+            color: white; /* Testo bianco */
+            padding: 15px 20px;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        #sendEmailButton:hover {
+            background-color: #2980b9; /* Blu più scuro al passaggio del mouse */
+        }
 
         #result {
             margin-top: 20px;
@@ -269,6 +284,7 @@
             <div id="confirmationForm" style="display: none; margin-top: 20px;">
                 <input type="text" id="userName" placeholder="Inserisci Nome e Cognome" required>
                 <button id="sendEmailButton">Carica e Invia via Email</button>
+                <button id="sendWhatsappButton">Carica e Invia via WhatsApp</button>
             </div>
             <p>
                 Ricordati che se hai intenzione di inviare più file devi caricarne uno alla volta <strong>RICARICANDO</strong> la pagina
@@ -367,6 +383,30 @@
                         var mailtoLink = "mailto:" + email + "?subject=" + subject + "&body=" + body;
 
                         window.location.href = mailtoLink;
+                    });
+                    document.getElementById('sendWhatsappButton').addEventListener('click', function() {
+                        var userName = document.getElementById('userName').value;
+                        if (!userName) {
+                            alert('Per favore inserisci Nome e Cognome.');
+                            return;
+                        }
+
+                        var whatsappNumber = "3336550214";
+                        var quality = (qualityOption === "standard" ? "Standard" : (qualityOption === "high" ? "Alta" : "Massima"));
+                        var color = (colorOption === "bw" ? "Bianco e Nero" : "Colori");
+                        var bindingText = (binding ? "Sì" : "No");
+
+                        var whatsappMessage = 
+                            "*"+userName+"*" + "%0A" +
+                            "Qualità della stampa: " + "*"+quality+"*" + "%0A" +
+                            "Stampa: " + "*"+color+"*" + "%0A" +
+                            "Rilegatura: " + "*"+bindingText+"*" + "%0A%0A" + 
+                            "ATTENZIONE: CONTROLLA CHE I CAMPI PRECOMPILATI SIANO GIUSTI. IN CASO CONTRARIO PUOI MODIFICARLI DIRETTAMENTE NEL MESSAGGIO%0A%0A" +
+                            "ATTENZIONE: RICORDA DI ALLEGARE IL FILE NELLA CHAT.";
+
+                        var whatsappLink = "https://wa.me/" + whatsappNumber + "?text=" + whatsappMessage;
+
+                        window.open(whatsappLink, '_blank');
                     });
                 });
             };
