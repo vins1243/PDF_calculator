@@ -303,8 +303,8 @@
                        class="convert-button" target="_blank">Carica</a>
                 </p>
 
-                <label for="googleDriveCheck">
-                    <input type="checkbox" id="googleDriveCheck"> Ho caricato il file sul Drive
+                <label for="DriveCheck">
+                    <input type="checkbox" id="DriveCheck"> Ho caricato il file sul Drive
                 </label>
                 <p id="error-message" style="color: red; display: none;">Devi prima confermare il caricamento sul Drive.</p>
 
@@ -353,16 +353,16 @@
         // Codice per la gestione dell'errore e dei pulsanti
         document.getElementById('showSendButtonsButton').addEventListener('click', function() {
             // Verifica se la casella è selezionata
-            if (!googleDriveCheck.checked) {
+            if (!DriveCheck.checked) {
                 // Mostra il messaggio di errore
                 document.getElementById('error-message').style.display = 'block';
 
                 // Aggiungi l'ombreggiatura rossa alla casella
-                googleDriveCheck.style.boxShadow = '0 0 10px red';
+                DriveCheck.style.boxShadow = '0 0 10px red';
             } else {
                 // Se la casella è selezionata, nascondi il messaggio di errore e rimuovi l'ombreggiatura rossa
                 document.getElementById('error-message').style.display = 'none';
-                googleDriveCheck.style.boxShadow = 'none';
+                DriveCheck.style.boxShadow = 'none';
 
                 // Mostra i pulsanti per inviare via email e WhatsApp
                 document.getElementById('sendButtons').style.display = 'block';
@@ -475,17 +475,17 @@
             fileReader.readAsArrayBuffer(fileInput.files[0]);
         });
         // Trova la casella di controllo e il pulsante "Invia"
-        const googleDriveCheck = document.getElementById('googleDriveCheck');
+        const DriveCheck = document.getElementById('DriveCheck');
         const sendButton = document.getElementById('showSendButtonsButton');
 
         // Disabilita il pulsante "Invia" all'inizio
         sendButton.disabled = true;
 
         // Aggiungi un event listener per abilitare/disabilitare il pulsante "Invia"
-        googleDriveCheck.addEventListener('change', function() {
-            if (googleDriveCheck.checked) {
-                sendButton.disabled = !googleDriveCheck.checked;
-                document.getElementById('error-message').style.display = googleDriveCheck.checked ? 'none' : 'block';
+        DriveCheck.addEventListener('change', function() {
+            if (DriveCheck.checked) {
+                sendButton.disabled = !DriveCheck.checked;
+                document.getElementById('error-message').style.display = DriveCheck.checked ? 'none' : 'block';
             } else {
                 sendButton.disabled = true; // Disabilita il pulsante se la casella non è selezionata
                 document.getElementById('error-message').style.display = 'block'; // Mostra il messaggio di errore
