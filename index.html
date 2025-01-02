@@ -336,6 +336,34 @@
         function roundUpToNextDecimal(value) {
             return Math.ceil(value * 10) / 10;
         }
+        function isSafari() {
+            const ua = navigator.userAgent;
+            return /Safari/.test(ua) && !/Chrome/.test(ua);
+        }
+        
+        function isSafari() {
+            const ua = navigator.userAgent;
+            return /Safari/.test(ua) && !/Chrome/.test(ua);
+        }
+
+        function optimizedScroll(element) {
+            const behavior = isSafari() ? 'auto' : 'smooth'; // Usa un comportamento senza animazione per Safari
+            element.scrollIntoView({
+                behavior: behavior,
+                block: 'start'
+            });
+        }
+
+
+        function optimizedScroll(element) {
+            const behavior = isSafari() ? 'auto' : 'smooth'; // Usa un comportamento senza animazione per Safari
+            element.scrollIntoView({
+                behavior: behavior,
+                block: 'start'
+            });
+        }
+
+        optimizedScroll(document.getElementById('confirmationForm'));
 
         function calculateBindingCost(numPages) {
             if (numPages <= 40) {
