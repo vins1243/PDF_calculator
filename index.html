@@ -413,8 +413,11 @@
                     document.getElementById('resultPrice').textContent = 'Prezzo totale: €' + totalCost.toFixed(2);
                     document.getElementById('resultPages').textContent = 'Numero di pagine: ' + numPages;
 
+                    document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+
                     document.getElementById('confirmButton').addEventListener('click', function() {
                         document.getElementById('confirmationForm').style.display = 'block';
+                        document.getElementById('confirmationForm').scrollIntoView({ behavior: 'smooth' });
                     });
 
                     document.getElementById('sendEmailButton').addEventListener('click', function() {
